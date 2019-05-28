@@ -9,7 +9,7 @@
 			"modernui" : 1
 		}
 ,
-		"rect" : [ 416.0, 147.0, 651.0, 480.0 ],
+		"rect" : [ 597.0, 254.0, 451.0, 480.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -52,12 +52,13 @@
 , 			{
 				"box" : 				{
 					"id" : "obj-8",
+					"linecount" : 2,
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 614.0, 151.0, 34.0, 22.0 ],
+					"patching_rect" : [ 614.0, 151.0, 102.0, 35.0 ],
 					"style" : "",
-					"text" : "print"
+					"text" : "print featherResponse"
 				}
 
 			}
@@ -122,7 +123,7 @@
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 313.0, 70.0, 120.0, 22.0 ],
 					"style" : "",
-					"text" : "address 172.20.10.5"
+					"text" : "address 192.168.1.1"
 				}
 
 			}

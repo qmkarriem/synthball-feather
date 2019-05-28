@@ -75,8 +75,6 @@ void setup() {
   // start the web server on port 80
   server.begin();
 
-
-
   // you're connected now, so print out the status
   printWiFiStatus();
   Udp.begin(localPort);
@@ -84,6 +82,30 @@ void setup() {
 
 
 void loop() {
+  // if there's data available, read a packet
+  int packetSize = Udp.parsePacket();
+  if (packetSize)
+  {
+    Serial.print("Received packet of size ");
+    Serial.println(packetSize);
+    Serial.print("From ");
+    IPAddress remoteIp = Udp.remoteIP();
+    Serial.print(remoteIp);
+    Serial.print(", port ");
+    Serial.println(Udp.remotePort());
+
+    // read the packet into packetBufffer
+    int len = Udp.read(packetBuffer, 255);
+    if (len > 0) packetBuffer[len] = 0;
+    Serial.println("Contents:");
+    Serial.println(packetBuffer);
+
+    // send a reply, to the IP address and port that sent us the packet we received
+    Udp.beginPacket(Udp.remoteIP(), 9000);
+    Udp.write(ReplyBuffer);
+    Udp.endPacket();
+  }
+  
   // compare the previous status to the current status
   if (status != WiFi.status()) {
     // it has changed update the variable
