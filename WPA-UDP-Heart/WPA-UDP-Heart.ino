@@ -1,13 +1,12 @@
 /*
-  Heartrate over UDP
 
-  Measure heartrate using the PulseSensor library; transmit over UDP using the WiFi101 library.
+ This project connects to an WPA encrypted WiFi network or access point using the WiFi101 library, 
+ and starts sending Heartrate data (BPM) sing the PulseSensor library.
 
-  created June 2019
-  by Quran Karriem & Rebecca Uliasz
-
+ created June 2019
+ by Quran Karriem & Rebecca Uliasz
  */
-
+ 
 #include <SPI.h>
 #include <WiFi101.h>
 #include <WiFiUdp.h>
@@ -21,7 +20,6 @@ const int PULSE_INPUT = A0;
 const int PULSE_BLINK = 13;    // Pin 13 is the on-board LED
 const int PULSE_FADE = 5;
 const int THRESHOLD = 550;   // Adjust this number to avoid noise when idle
-
 byte samplesUntilReport;
 const byte SAMPLES_PER_SERIAL_SAMPLE = 10;
 PulseSensorPlayground pulseSensor;
@@ -29,44 +27,34 @@ PulseSensorPlayground pulseSensor;
 ///////please enter your sensitive data in the Secret tab/arduino_secrets.h
 char ssid[] = SECRET_SSID;        // your network SSID (name)
 char pass[] = SECRET_PASS;    // your network password (use for WPA, or use as key for WEP)
-int keyIndex = 0;                // your network key Index number (needed only for WEP)
+int status = WL_IDLE_STATUS;     // the WiFi radio's status
+WiFiUDP Udp; 
 
 unsigned int localPort = 2390;      // local port to listen on
 char packetBuffer[255]; //buffer to hold incoming packet
-char  ReplyBuffer[] = "acknowledged";       // a string to send back
-
-int status = WL_IDLE_STATUS;
-WiFiUDP Udp; 
+char ReplyBuffer[] = "acknowledged";       // a string to send back
 
 void setup() {
   //Configure pins for Adafruit ATWINC1500 Feather
   WiFi.setPins(8,7,4,2);
-  //Initialize serial and wait for port to open:
 
   // check for the presence of the shield:
   if (WiFi.status() == WL_NO_SHIELD) {
-    //Serial.println("WiFi shield not present");
-    // don't continue
+    Serial.println("WiFi shield not present");
+    // don't continue:
     while (true);
   }
 
-  // by default the local IP address of will be 192.168.1.1
-  // you can override it with the following:
-  // WiFi.config(IPAddress(10, 0, 0, 1));
+  // attempt to connect to WiFi network:
+  while ( status != WL_CONNECTED) {
+    // Connect to WPA/WPA2 network:
+    status = WiFi.begin(ssid, pass);
 
-  // Create open network. Change this line if you want to create an WEP network:
-  status = WiFi.beginAP(ssid);
-  if (status != WL_AP_LISTENING) {
-    //Serial.println("Creating access point failed");
-    // don't continue
-    while (true);
+    // wait 10 seconds for connection:
+    delay(10000);
   }
 
-  // wait 10 seconds for connection:
-  delay(10000);
-
-  // you're connected now, so print out the status
-  printWiFiStatus();
+  // you're connected now, so print out the data:
   Udp.begin(localPort);
 
   pulseSensor.analogInput(PULSE_INPUT);
@@ -93,9 +81,8 @@ void setup() {
   }
 }
 
-
 void loop() {
-
+  // check the network connection once every 10 seconds:
   if (pulseSensor.sawNewSample()) {
     /*
        Every so often, send the latest Sample.
@@ -117,52 +104,10 @@ void loop() {
       }
     }
   }
-    
-  // if there's data available, read a packet
-  int packetSize = Udp.parsePacket();
-  if (packetSize)
-  {
-    IPAddress remoteIp = Udp.remoteIP();
-
-    // read the packet into packetBufffer
-    int len = Udp.read(packetBuffer, 255);
-    if (len > 0) packetBuffer[len] = 0;
-
-    // send a reply, to the IP address and port that sent us the packet we received
-    Udp.beginPacket(Udp.remoteIP(), 9000);
-    Udp.write(ReplyBuffer);
-    Udp.endPacket();
-  }
-  
-  // compare the previous status to the current status
-  if (status != WiFi.status()) {
-    // it has changed update the variable
-    status = WiFi.status();
-
-    if (status == WL_AP_CONNECTED) {
-      byte remoteMac[6];
-
-      // a device has connected to the AP
-      //Serial.print("Device connected to AP, MAC address: ");
-      WiFi.APClientMacAddress(remoteMac);
-      //printMacAddress(remoteMac);
-    } else {
-      // a device has disconnected from the AP, and we are back in listening mode
-      //Serial.println("Device disconnected from AP");
-    }
-  }
-}
-
-void printWiFiStatus() {
-  // print your WiFi shield's IP address:
-  IPAddress ip = WiFi.localIP();
-
-  // print the received signal strength:
-  long rssi = WiFi.RSSI();
 }
 
 void sendBPM() {
-  Udp.beginPacket(Udp.remoteIP(), 9000);
+  Udp.beginPacket(IPAddress(169, 254, 121, 226), 9000);
   Udp.write(pulseSensor.getBeatsPerMinute());
   Udp.endPacket();
 }
