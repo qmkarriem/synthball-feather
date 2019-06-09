@@ -121,6 +121,7 @@ void loop() {
       */
       if (pulseSensor.sawStartOfBeat()) {
         pulseSensor.outputBeat();
+        sendBPM();
       }
     }
   }
@@ -158,7 +159,6 @@ void loop() {
       //Serial.println("Device disconnected from AP");
     }
   }
-  sendBPM();
 }
 
 void printWiFiStatus() {
