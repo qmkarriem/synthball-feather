@@ -44,8 +44,6 @@ char packetBuffer[255]; //buffer to hold incoming packet
 char  ReplyBuffer[] = "acknowledged";       // a string to send back
 
 int status = WL_IDLE_STATUS;
-WiFiServer server(80);
-
 WiFiUDP Udp; 
 
 void setup() {
@@ -75,9 +73,6 @@ void setup() {
   // wait 10 seconds for connection:
   delay(10000);
 
-  // start the web server on port 80
-  //server.begin();
-
   // you're connected now, so print out the status
   printWiFiStatus();
   Udp.begin(localPort);
@@ -85,12 +80,7 @@ void setup() {
   pulseSensor.analogInput(PULSE_INPUT);
   pulseSensor.blinkOnPulse(PULSE_BLINK);
   pulseSensor.fadeOnPulse(PULSE_FADE);
-
-  pulseSensor.setSerial(Serial);
-  //pulseSensor.setOutputType(OUTPUT_TYPE);
   pulseSensor.setThreshold(THRESHOLD);
-
-  samplesUntilReport = SAMPLES_PER_SERIAL_SAMPLE;
   
   // Now that everything is ready, start reading the PulseSensor signal.
   if (!pulseSensor.begin()) {
@@ -113,7 +103,7 @@ void setup() {
 
 
 void loop() {
-  // if there's data available, read a packet
+
   if (pulseSensor.sawNewSample()) {
     /*
        Every so often, send the latest Sample.
@@ -133,11 +123,13 @@ void loop() {
         pulseSensor.outputBeat();
       }
     }
+  }
+    
+  // if there's data available, read a packet
   int packetSize = Udp.parsePacket();
   if (packetSize)
   {
     IPAddress remoteIp = Udp.remoteIP();
-
 
     // read the packet into packetBufffer
     int len = Udp.read(packetBuffer, 255);
@@ -166,14 +158,19 @@ void loop() {
       //Serial.println("Device disconnected from AP");
     }
   }
+  sendBPM();
 }
-}
-void printWiFiStatus() {
 
+void printWiFiStatus() {
   // print your WiFi shield's IP address:
   IPAddress ip = WiFi.localIP();
 
   // print the received signal strength:
   long rssi = WiFi.RSSI();
+}
 
+void sendBPM() {
+  Udp.beginPacket(Udp.remoteIP(), 9000);
+  Udp.write(pulseSensor.getBeatsPerMinute());
+  Udp.endPacket();
 }
