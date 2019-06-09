@@ -82,7 +82,6 @@ void setup() {
 }
 
 void loop() {
-  // check the network connection once every 10 seconds:
   if (pulseSensor.sawNewSample()) {
     /*
        Every so often, send the latest Sample.
