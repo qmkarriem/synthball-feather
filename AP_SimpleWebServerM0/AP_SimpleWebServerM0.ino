@@ -32,12 +32,14 @@ void setup() {
   //Configure pins for Adafruit ATWINC1500 Feather
   WiFi.setPins(8,7,4,2);
   //Initialize serial and wait for port to open:
-  Serial.begin(9600);
-  while (!Serial) {
+  
+/*  while (!Serial) {
+    delay(100); 
     ; // wait for serial port to connect. Needed for native USB port only
   }
+  Serial.begin(9600);
 
-  Serial.println("Access Point Web Server");
+  Serial.println("Access Point Web Server"); */
 
   pinMode(led, OUTPUT);      // set the LED pin mode
 
@@ -53,16 +55,16 @@ void setup() {
   // WiFi.config(IPAddress(10, 0, 0, 1));
 
   // print the network name (SSID);
-  Serial.print("Creating access point named: ");
-  Serial.println(ssid);
+  /*Serial.print("Creating access point named: ");
+  Serial.println(ssid);*/
 
   // Create open network. Change this line if you want to create an WEP network:
   status = WiFi.beginAP(ssid);
-  if (status != WL_AP_LISTENING) {
+ /* if (status != WL_AP_LISTENING) {
     Serial.println("Creating access point failed");
     // don't continue
     while (true);
-  }
+  }*/
 
   // wait 10 seconds for connection:
   delay(10000);
@@ -85,24 +87,24 @@ void loop() {
       byte remoteMac[6];
 
       // a device has connected to the AP
-      Serial.print("Device connected to AP, MAC address: ");
+     // Serial.print("Device connected to AP, MAC address: ");
       WiFi.APClientMacAddress(remoteMac);
-      printMacAddress(remoteMac);
+   //   printMacAddress(remoteMac);
     } else {
       // a device has disconnected from the AP, and we are back in listening mode
-      Serial.println("Device disconnected from AP");
+     // Serial.println("Device disconnected from AP");
     }
   }
   
   WiFiClient client = server.available();   // listen for incoming clients
 
   if (client) {                             // if you get a client,
-    Serial.println("new client");           // print a message out the serial port
+    //Serial.println("new client");           // print a message out the serial port
     String currentLine = "";                // make a String to hold incoming data from the client
     while (client.connected()) {            // loop while the client's connected
       if (client.available()) {             // if there's bytes to read from the client,
         char c = client.read();             // read a byte, then
-        Serial.write(c);                    // print it out the serial monitor
+       // Serial.write(c);                    // print it out the serial monitor
         if (c == '\n') {                    // if the byte is a newline character
 
           // if the current line is blank, you got two newline characters in a row.
@@ -142,32 +144,32 @@ void loop() {
     }
     // close the connection:
     client.stop();
-    Serial.println("client disconnected");
+   // Serial.println("client disconnected");
   }
 }
 
 void printWiFiStatus() {
   // print the SSID of the network you're attached to:
-  Serial.print("SSID: ");
-  Serial.println(WiFi.SSID());
+ // Serial.print("SSID: ");
+  //Serial.println(WiFi.SSID());
 
   // print your WiFi shield's IP address:
   IPAddress ip = WiFi.localIP();
-  Serial.print("IP Address: ");
-  Serial.println(ip);
+  //Serial.print("IP Address: ");
+ // Serial.println(ip);
 
   // print the received signal strength:
   long rssi = WiFi.RSSI();
-  Serial.print("signal strength (RSSI):");
+  /*Serial.print("signal strength (RSSI):");
   Serial.print(rssi);
   Serial.println(" dBm");
   // print where to go in a browser:
   Serial.print("To see this page in action, open a browser to http://");
-  Serial.println(ip);
+  Serial.println(ip);*/
 
 }
 
-void printMacAddress(byte mac[]) {
+/*void printMacAddress(byte mac[]) {
   for (int i = 5; i >= 0; i--) {
     if (mac[i] < 16) {
       Serial.print("0");
@@ -178,4 +180,4 @@ void printMacAddress(byte mac[]) {
     }
   }
   Serial.println();
-}
+}*/

@@ -1,2 +1,2 @@
-#define SECRET_SSID "qPhone"
-#define SECRET_PASS "babyLENA"
+#define SECRET_SSID "feather"
+#define SECRET_PASS ""
