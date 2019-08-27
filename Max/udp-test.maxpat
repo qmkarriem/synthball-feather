@@ -9,7 +9,7 @@
 			"modernui" : 1
 		}
 ,
-		"rect" : [ 597.0, 254.0, 451.0, 480.0 ],
+		"rect" : [ 171.0, 318.0, 717.0, 480.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -38,6 +38,19 @@
 		"subpatcher_template" : "",
 		"boxes" : [ 			{
 				"box" : 				{
+					"id" : "obj-4",
+					"maxclass" : "newobj",
+					"numinlets" : 3,
+					"numoutlets" : 1,
+					"outlettype" : [ "int" ],
+					"patching_rect" : [ 528.0, 123.0, 40.0, 22.0 ],
+					"style" : "",
+					"text" : "itoa"
+				}
+
+			}
+, 			{
+				"box" : 				{
 					"id" : "obj-11",
 					"maxclass" : "message",
 					"numinlets" : 2,
@@ -45,7 +58,7 @@
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 549.0, 41.0, 61.0, 22.0 ],
 					"style" : "",
-					"text" : "port 9000"
+					"text" : "port 8888"
 				}
 
 			}
@@ -56,7 +69,7 @@
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 614.0, 151.0, 102.0, 35.0 ],
+					"patching_rect" : [ 621.5, 194.0, 102.0, 35.0 ],
 					"style" : "",
 					"text" : "print featherResponse"
 				}
@@ -121,9 +134,9 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 313.0, 70.0, 120.0, 22.0 ],
+					"patching_rect" : [ 313.0, 70.0, 127.0, 22.0 ],
 					"style" : "",
-					"text" : "address 192.168.1.1"
+					"text" : "address 172.20.10.12"
 				}
 
 			}
@@ -171,6 +184,13 @@
 			}
 , 			{
 				"patchline" : 				{
+					"destination" : [ "obj-8", 0 ],
+					"source" : [ "obj-4", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
 					"destination" : [ "obj-1", 0 ],
 					"source" : [ "obj-5", 0 ]
 				}
@@ -178,7 +198,7 @@
 			}
 , 			{
 				"patchline" : 				{
-					"destination" : [ "obj-8", 0 ],
+					"destination" : [ "obj-4", 0 ],
 					"source" : [ "obj-7", 0 ]
 				}
 
