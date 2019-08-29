@@ -114,10 +114,19 @@ void loop() {
     Udp.write(c);
     Udp.endPacket();
   }
-  int ret = snprintf(buffer, bufferSize, "G: %f %f %f A: %f %f %f M: %f %f %f", g.gyro.x, g.gyro.y, g.gyro.z, a.acceleration.x, a.acceleration.y, a.acceleration.z, m.magnetic.x, m.magnetic.y, m.magnetic.z);
+  int ret = snprintf(buffer, bufferSize, "G: %f %f %f \r\n", g.gyro.x, g.gyro.y, g.gyro.z);
   Udp.beginPacket(Udp.remoteIP(), remotePort);
   Udp.write(buffer);
   Udp.endPacket();
+  ret = snprintf(buffer, bufferSize, "A: %f %f %f \r\n", a.acceleration.x, a.acceleration.y, a.acceleration.z);
+  Udp.beginPacket(Udp.remoteIP(), remotePort);
+  Udp.write(buffer);
+  Udp.endPacket();
+  ret = snprintf(buffer, bufferSize, "M: %f %f %f \r\n", m.magnetic.x, m.magnetic.y, m.magnetic.z);
+  Udp.beginPacket(Udp.remoteIP(), remotePort);
+  Udp.write(buffer);
+  Udp.endPacket();
+  
 
   /*Serial.print("G: ");
   Serial.print("Accel X: "); Serial.print(a.acceleration.x); Serial.print(" m/s^2");
