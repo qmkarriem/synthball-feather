@@ -9,7 +9,7 @@
 			"modernui" : 1
 		}
 ,
-		"rect" : [ 171.0, 318.0, 717.0, 480.0 ],
+		"rect" : [ 452.0, 215.0, 717.0, 480.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -134,9 +134,9 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 313.0, 70.0, 127.0, 22.0 ],
+					"patching_rect" : [ 313.0, 70.0, 100.0, 22.0 ],
 					"style" : "",
-					"text" : "address 172.20.10.12"
+					"text" : "address 10.0.0.1"
 				}
 
 			}

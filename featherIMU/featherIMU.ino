@@ -23,6 +23,7 @@ Adafruit_LSM9DS1 lsm = Adafruit_LSM9DS1();
 //Adafruit_LSM9DS1 lsm = Adafruit_LSM9DS1(LSM9DS1_XGCS, LSM9DS1_MCS);
 
 WiFiUDP Udp;
+WiFiServer server(2390);
 const size_t bufferSize = 255;
 char buffer[bufferSize];
 char IPString[80];
@@ -53,6 +54,10 @@ void setupSensor()
 void setup() {
   WiFi.setPins(8,7,4,2);
   Serial.begin(115200);
+  WiFi.config(IPAddress(10, 0, 0, 1));
+  status = WiFi.beginAP(ssid);
+  delay(10000);
+  server.begin();
   while (!Serial) {
     delay(1); // will pause Zero, Leonardo, etc until serial console opens
   }
@@ -75,15 +80,15 @@ void setup() {
     // don't continue:
     while (true);
   }
-  while ( status != WL_CONNECTED) {
+  /*while ( status != WL_CONNECTED) {
     Serial.print("Attempting to connect to SSID: ");
     Serial.println(ssid);
     // Connect to WPA/WPA2 network. Change this line if using open or WEP network:
-    status = WiFi.begin(ssid, pass);
+    status = WiFi.begin(ssid);
 
     // wait 10 seconds for connection:
     delay(10000);
-  }
+  }*/
   Serial.println("Connected to wifi");
   printWiFiStatus();
   Udp.begin(localPort);
@@ -91,7 +96,22 @@ void setup() {
 
 void loop() {
   lsm.read();  /* ask it to read in the data */ 
-  
+  if (status != WiFi.status()) {
+    // it has changed update the variable
+    status = WiFi.status();
+
+    if (status == WL_AP_CONNECTED) {
+      byte remoteMac[6];
+
+      // a device has connected to the AP
+     // Serial.print("Device connected to AP, MAC address: ");
+      WiFi.APClientMacAddress(remoteMac);
+   //   printMacAddress(remoteMac);
+    } else {
+      // a device has disconnected from the AP, and we are back in listening mode
+     // Serial.println("Device disconnected from AP");
+    }
+  }
   /* Get a new sensor event */ 
   sensors_event_t a, m, g, temp;
   lsm.getEvent(&a, &m, &g, &temp);

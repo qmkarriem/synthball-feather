@@ -72,6 +72,22 @@ void setup() {
 
 void loop() {
   // if there's data available, read a packet
+  if (status != WiFi.status()) {
+    // it has changed update the variable
+    status = WiFi.status();
+
+    if (status == WL_AP_CONNECTED) {
+      byte remoteMac[6];
+
+      // a device has connected to the AP
+     // Serial.print("Device connected to AP, MAC address: ");
+      WiFi.APClientMacAddress(remoteMac);
+   //   printMacAddress(remoteMac);
+    } else {
+      // a device has disconnected from the AP, and we are back in listening mode
+     // Serial.println("Device disconnected from AP");
+    }
+  }
   int packetSize = Udp.parsePacket();
   if (packetSize)
   {
