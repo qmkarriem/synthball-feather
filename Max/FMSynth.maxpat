@@ -4,12 +4,12 @@
 		"appversion" : 		{
 			"major" : 7,
 			"minor" : 3,
-			"revision" : 4,
-			"architecture" : "x86",
+			"revision" : 6,
+			"architecture" : "x64",
 			"modernui" : 1
 		}
 ,
-		"rect" : [ 656.0, 79.0, 902.0, 681.0 ],
+		"rect" : [ 115.0, -931.0, 902.0, 681.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -38,13 +38,14 @@
 		"subpatcher_template" : "",
 		"boxes" : [ 			{
 				"box" : 				{
-					"id" : "obj-15",
-					"maxclass" : "button",
-					"numinlets" : 1,
+					"id" : "obj-18",
+					"maxclass" : "message",
+					"numinlets" : 2,
 					"numoutlets" : 1,
-					"outlettype" : [ "bang" ],
-					"patching_rect" : [ 487.0, 66.0, 24.0, 24.0 ],
-					"style" : ""
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 559.0, 77.0, 29.5, 22.0 ],
+					"style" : "",
+					"text" : "22"
 				}
 
 			}
@@ -94,9 +95,9 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 461.0, 17.0, 81.0, 22.0 ],
+					"patching_rect" : [ 461.0, 17.0, 72.0, 22.0 ],
 					"style" : "",
-					"text" : "172.20.10.12"
+					"text" : "172.20.10.3"
 				}
 
 			}
@@ -122,7 +123,7 @@
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 679.0, 260.666656, 29.5, 22.0 ],
 					"style" : "",
-					"text" : "1.1"
+					"text" : "10."
 				}
 
 			}
@@ -688,13 +689,6 @@
 			}
 , 			{
 				"patchline" : 				{
-					"destination" : [ "obj-5", 3 ],
-					"source" : [ "obj-15", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
 					"destination" : [ "obj-1", 1 ],
 					"source" : [ "obj-16", 0 ]
 				}
@@ -704,6 +698,13 @@
 				"patchline" : 				{
 					"destination" : [ "obj-2", 0 ],
 					"source" : [ "obj-17", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-5", 3 ],
+					"source" : [ "obj-18", 0 ]
 				}
 
 			}
@@ -990,14 +991,14 @@
  ],
 		"dependency_cache" : [ 			{
 				"name" : "featherUDP.maxpat",
-				"bootpath" : "~/Projects/synthball-feather/Max",
+				"bootpath" : "~/Documents/GitHub/synthball-feather/Max",
 				"patcherrelativepath" : ".",
 				"type" : "JSON",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "noteTrigger.maxpat",
-				"bootpath" : "~/Projects/synthball-feather/Max",
+				"bootpath" : "~/Documents/GitHub/synthball-feather/Max",
 				"patcherrelativepath" : ".",
 				"type" : "JSON",
 				"implicit" : 1

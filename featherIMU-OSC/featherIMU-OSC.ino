@@ -4,7 +4,10 @@
 #include <Adafruit_Sensor.h> 
 #include <WiFi101.h>
 #include <WiFiUdp.h>
+#include <ArduinoOSC.h>
 #include "arduino_secrets.h"
+
+OscWiFi osc;
 int status = WL_IDLE_STATUS;
 char ssid[] = SECRET_SSID;        // your network SSID (name)
 char pass[] = SECRET_PASS;    // your network password (use for WPA, or use as key for WEP)
@@ -23,7 +26,7 @@ Adafruit_LSM9DS1 lsm = Adafruit_LSM9DS1();
 //Adafruit_LSM9DS1 lsm = Adafruit_LSM9DS1(LSM9DS1_XGCS, LSM9DS1_MCS);
 
 WiFiUDP Udp;
-const size_t bufferSize = 255;
+const size_t bufferSize = 128;
 char buffer[bufferSize];
 char IPString[80];
 IPAddress remoteIP(172,20,10,2);
@@ -87,11 +90,12 @@ void setup() {
   Serial.println("Connected to wifi");
   printWiFiStatus();
   Udp.begin(localPort);
+  osc.begin(8888);
 }
 
 void loop() {
   lsm.read();  /* ask it to read in the data */ 
-  
+  osc.parse();
   /* Get a new sensor event */ 
   sensors_event_t a, m, g, temp;
   lsm.getEvent(&a, &m, &g, &temp);
@@ -114,22 +118,9 @@ void loop() {
     Udp.write(c);
     Udp.endPacket();
   }
-  int ret = snprintf(buffer, bufferSize, "G: %f %f %f \r\n", g.gyro.x, g.gyro.y, g.gyro.z);
-  Udp.beginPacket(Udp.remoteIP(), remotePort);
-  Udp.write(buffer);
-  Udp.endPacket();
+  int ret = snprintf(buffer, bufferSize, "G %.5f \r\n", g.gyro.x);
+  osc.send(Udp.remoteIP(), remotePort, "/send", "G %.5f \r\n", g.gyro.x);
   
-  ret = snprintf(buffer, bufferSize, "A: %f %f %f \r\n", a.acceleration.x, a.acceleration.y, a.acceleration.z);
-  Udp.beginPacket(Udp.remoteIP(), remotePort);
-  Udp.write(buffer);
-  Udp.endPacket();
-  
-  ret = snprintf(buffer, bufferSize, "M: %f %f %f \r\n", m.magnetic.x, m.magnetic.y, m.magnetic.z);
-  Udp.beginPacket(Udp.remoteIP(), remotePort);
-  Udp.write(buffer);
-  Udp.endPacket();
-
-
   /*Serial.print("G: ");
   Serial.print("Accel X: "); Serial.print(a.acceleration.x); Serial.print(" m/s^2");
   Serial.print("\tY: "); Serial.print(a.acceleration.y);     Serial.print(" m/s^2 ");
